@@ -1,14 +1,13 @@
 # User Creation
 
 ## Overview
-User Creation is a **Spring Boot-based user creation system** that utilizes **PostgreSQL** for data storage and **Redis** for caching frequently accessed data.
+User Creation is a **Spring Boot-based user creation system** that utilizes **PostgreSQL** for data storage.
 
 ## System Requirements
 Ensure that the following dependencies are installed before running the project:
 - **Docker**
 - **Java 17**
 - **Maven**
-- **Redis**
 - **PostgreSQL**
 
 ## Setup & Installation
@@ -36,7 +35,6 @@ This command will build and start the services in detached mode.
 ## Services & Ports
 - **Spring Boot Application** → `http://localhost:8080`
 - **PostgreSQL** → `localhost:5432`
-- **Redis** → `localhost:6379`
 
 ## API Documentation
 Once the application is running, the API documentation can be accessed via Swagger:
@@ -51,20 +49,6 @@ Once the application is running, the API documentation can be accessed via Swagg
 - `GET /api/users/users` → Get all users (Uses Redis caching)
 - `GET /api/users/admins` → Get admin users (Uses Redis caching)
 
-## Redis Caching
-The following endpoints utilize **Redis** for improved performance:
-- `GET /api/users/users`
-- `GET /api/users/admins`
-
-### Clearing the Cache
-To clear the Redis cache, restart the Redis service using:
-```sh
-docker restart <redis-container-name>
-```
-Or manually flush the cache from inside the Redis container:
-```sh
-docker exec -it <redis-container-name> redis-cli FLUSHALL
-```
 
 ## Database Migrations
 The project uses **Flyway** for database migrations. When the application starts, Flyway automatically applies any new migration scripts.
