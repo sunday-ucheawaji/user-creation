@@ -42,8 +42,8 @@ Once the application is running, the API documentation can be accessed via Swagg
 
 ## Key API Endpoints
 ### **User Registration**
-- `POST /api/users/register` → Register a new user
-- `POST /api/users/register-admin` → Register an admin user
+- `POST /api/users/registration` → Register a new user
+- `POST /api/users/admin-registration` → Register an admin user
 
 ### **Fetching Users**
 - `GET /api/users/users` → Get all users 
