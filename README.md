@@ -46,8 +46,8 @@ Once the application is running, the API documentation can be accessed via Swagg
 - `POST /api/users/register-admin` → Register an admin user
 
 ### **Fetching Users**
-- `GET /api/users/users` → Get all users (Uses Redis caching)
-- `GET /api/users/admins` → Get admin users (Uses Redis caching)
+- `GET /api/users/users` → Get all users 
+- `GET /api/users/admins` → Get admin users
 
 
 ## Database Migrations
