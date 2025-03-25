@@ -9,6 +9,10 @@ import com.sundayuche.usercreation.entity.RoleType;
 import com.sundayuche.usercreation.entity.User;
 import com.sundayuche.usercreation.repository.RoleRepository;
 import com.sundayuche.usercreation.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,29 +84,28 @@ public class UserService {
         return new RegisterResponse("Admin registered successfully", admin.getEmail(), "ADMIN");
     }
 
-    public List<UserResponse> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream()
+    public Page<UserResponse> getAllUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("firstName").ascending()); // Sorting by first name
+        Page<User> users = userRepository.findAll(pageable);
+        return users
                 .map(user -> new UserResponse(
                         user.getFirstName(),
                         user.getLastName(),
                         user.getEmail(),
                         user.getRoles() // Convert Set<Role> to List<String> inside DTO
-                ))
-                .collect(Collectors.toList());
+                ));
     }
 
-    public List<UserResponse> getAdminUsers() {
-
-        List<User> adminUsers = userRepository.findByRoles_Name(RoleType.ADMIN);
-        return adminUsers.stream()
+    public Page<UserResponse> getAdminUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("firstName").ascending());
+        Page<User> adminUsers = userRepository.findByRoles_Name(RoleType.ADMIN, pageable);
+        return adminUsers
                 .map(user -> new UserResponse(
                         user.getFirstName(),
                         user.getLastName(),
                         user.getEmail(),
                         user.getRoles() // Convert Set<Role> to List<String> inside DTO
-                ))
-                .collect(Collectors.toList());
+                ));
     }
 }
 
