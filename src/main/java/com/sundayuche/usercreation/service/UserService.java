@@ -86,7 +86,7 @@ public class UserService {
         return new RegisterResponse("Admin registered successfully", admin.getEmail(), "ADMIN");
     }
 
-    @Cacheable(value = "users")
+    @Cacheable(value = "users", key = "#users")
     public List<UserResponse> getAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream()

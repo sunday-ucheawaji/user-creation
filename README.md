@@ -16,7 +16,7 @@ This project is designed to run using **Docker**. Follow the steps below to set 
 
 ### 1. Clone the Repository
 ```sh
-git clone <repository-url>
+git clone https://github.com/sunday-ucheawaji/user-creation.git
 cd usercreation
 ```
 
