@@ -8,6 +8,8 @@ import com.sundayuche.usercreation.entity.RoleType;
 import com.sundayuche.usercreation.entity.User;
 import com.sundayuche.usercreation.repository.RoleRepository;
 import com.sundayuche.usercreation.repository.UserRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,12 @@ public class UserService {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    // Save user and clear cache
+    @CacheEvict(value = {"users", "adminUsers"}, allEntries = true)
+    public User saveUser(User user) {
+        return userRepository.save(user);
     }
 
     @Transactional
@@ -78,6 +86,7 @@ public class UserService {
         return new RegisterResponse("Admin registered successfully", admin.getEmail(), "ADMIN");
     }
 
+    @Cacheable(value = "users")
     public List<UserResponse> getAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream()
@@ -90,6 +99,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    @Cacheable(value = "adminUsers")
     public List<UserResponse> getAdminUsers() {
 
         List<User> adminUsers = userRepository.findByRoles_Name(RoleType.ADMIN);
