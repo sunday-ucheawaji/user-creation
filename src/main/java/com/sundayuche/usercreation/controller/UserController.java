@@ -10,8 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/users")
@@ -24,21 +22,21 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/registration")
     @Operation(summary = "Register a new user", description = "Registers a new user with basic details")
     public ResponseEntity<RegisterResponse> registerUser(@RequestBody RegisterRequest request) {
         RegisterResponse response = userService.registerUser(request);
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/register-admin")
+    @PostMapping("/admin-registration")
     @Operation(summary = "Register an admin user", description = "Registers a new admin user")
     public ResponseEntity<RegisterResponse> registerAdmin(@RequestBody RegisterRequest request) {
         RegisterResponse response = userService.registerAdmin(request);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/users")
+    @GetMapping("")
     @Operation(summary = "Get all users", description = "Fetches a list of all users")
     public ResponseEntity<Page<UserResponse>> getAllUsers(@RequestParam(defaultValue = "0") int page,
                                                           @RequestParam(defaultValue = "10") int size) {
