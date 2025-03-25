@@ -2,16 +2,19 @@ package com.sundayuche.usercreation.controller;
 
 import com.sundayuche.usercreation.dto.RegisterRequest;
 import com.sundayuche.usercreation.dto.RegisterResponse;
-import com.sundayuche.usercreation.entity.User;
+import com.sundayuche.usercreation.dto.UserResponse;
 import com.sundayuche.usercreation.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/users")
+@Tag(name = "User Controller", description = "Endpoints for user management")
 public class UserController {
 
     private final UserService userService;
@@ -21,33 +24,31 @@ public class UserController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Register a new user", description = "Registers a new user with basic details")
     public ResponseEntity<RegisterResponse> registerUser(@RequestBody RegisterRequest request) {
         RegisterResponse response = userService.registerUser(request);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register-admin")
+    @Operation(summary = "Register an admin user", description = "Registers a new admin user")
     public ResponseEntity<RegisterResponse> registerAdmin(@RequestBody RegisterRequest request) {
         RegisterResponse response = userService.registerAdmin(request);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
-    public ResponseEntity<List<String>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        List<String> userEmails = users.stream()
-                .map(User::getEmail)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(userEmails);
+    @GetMapping("/users")
+    @Operation(summary = "Get all users", description = "Fetches a list of all users")
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
+        List<UserResponse> userResponses = userService.getAllUsers();
+        return ResponseEntity.ok(userResponses);
     }
 
-
     @GetMapping("/admins")
-    public ResponseEntity<List<String>> getAdminUsers() {
-        List<User> admins = userService.getAdminUsers();
-        List<String> adminEmails = admins.stream()
-                .map(User::getEmail)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(adminEmails);
+    @Operation(summary = "Get all admin users", description = "Fetches a list of all admin users")
+    public ResponseEntity<List<UserResponse>> getAdminUsers() {
+        List<UserResponse> userResponses = userService.getAdminUsers();
+        return ResponseEntity.ok(userResponses);
+
     }
 }

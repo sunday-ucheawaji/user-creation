@@ -1,30 +1,30 @@
 package com.sundayuche.usercreation.service;
 
-
-
 import com.sundayuche.usercreation.dto.RegisterRequest;
 import com.sundayuche.usercreation.dto.RegisterResponse;
+import com.sundayuche.usercreation.dto.UserResponse;
 import com.sundayuche.usercreation.entity.Role;
 import com.sundayuche.usercreation.entity.RoleType;
 import com.sundayuche.usercreation.entity.User;
 import com.sundayuche.usercreation.repository.RoleRepository;
 import com.sundayuche.usercreation.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder; // Injected encoder
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -78,13 +78,29 @@ public class UserService {
         return new RegisterResponse("Admin registered successfully", admin.getEmail(), "ADMIN");
     }
 
-
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(user -> new UserResponse(
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getEmail(),
+                        user.getRoles() // Convert Set<Role> to List<String> inside DTO
+                ))
+                .collect(Collectors.toList());
     }
 
-    public List<User> getAdminUsers() {
-        return userRepository.findByRoles_Name("ADMIN");
+    public List<UserResponse> getAdminUsers() {
+
+        List<User> adminUsers = userRepository.findByRoles_Name(RoleType.ADMIN);
+        return adminUsers.stream()
+                .map(user -> new UserResponse(
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getEmail(),
+                        user.getRoles() // Convert Set<Role> to List<String> inside DTO
+                ))
+                .collect(Collectors.toList());
     }
 }
 
