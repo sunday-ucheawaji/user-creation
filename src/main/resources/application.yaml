@@ -7,12 +7,6 @@ spring:
     password: holyboy191
     driver-class-name: org.postgresql.Driver
 
-  cache:
-    type: redis
-  redis:
-    host: redis
-    port: 6379
-    timeout: 60000  # 60 seconds
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -27,12 +21,9 @@ spring:
     level:
       org:
         flywaydb: DEBUG
-
-jwt:
-  secret: ${JWT_SECRET}
-  expiration: 300000  # 5 minutes in milliseconds
-  refresh-expiration: 86400000  # 1 day in milliseconds
-
+  docker:
+    compose:
+      enabled: false
 
 springdoc:
   api-docs:

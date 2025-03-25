@@ -1,5 +1,6 @@
 package com.sundayuche.usercreation.service;
 
+import com.sundayuche.usercreation.customException.EmailAlreadyExistsException;
 import com.sundayuche.usercreation.dto.RegisterRequest;
 import com.sundayuche.usercreation.dto.RegisterResponse;
 import com.sundayuche.usercreation.dto.UserResponse;
@@ -34,7 +35,7 @@ public class UserService {
     @Transactional
     public RegisterResponse registerUser(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Email is already in use");
+            throw new EmailAlreadyExistsException("Email is already in use");
         }
 
         User user = new User();
@@ -58,7 +59,7 @@ public class UserService {
     @Transactional
     public RegisterResponse registerAdmin(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Email is already in use");
+            throw new EmailAlreadyExistsException("Email is already in use");
         }
 
         User admin = new User();
